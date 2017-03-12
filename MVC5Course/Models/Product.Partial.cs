@@ -18,6 +18,7 @@ namespace MVC5Course.Models
         [StringLength(80, ErrorMessage="欄位長度不得大於 80 個字元")]
         [Required(ErrorMessage = "請輸入產品名稱 {0}")]
         [DisplayName("產品名稱")]
+        [商品名稱不能有Austin字串(ErrorMessage = "商品名稱不能有Austin字串")]
         public string ProductName { get; set; }
         [Required]
         [Range(1, 99999, ErrorMessage = "請輸入範圍介於 1 - 99999 之間的數值")]
