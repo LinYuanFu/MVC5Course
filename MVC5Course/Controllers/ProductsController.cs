@@ -13,7 +13,7 @@ namespace MVC5Course.Controllers
 {
     public class ProductsController : Controller
     {
-        private FabricsEntities db = new FabricsEntities();
+    //    private FabricsEntities db = new FabricsEntities();
 
         ProductRepository repo = RepositoryHelper.GetProductRepository();
 
@@ -109,6 +109,7 @@ namespace MVC5Course.Controllers
         {
             if (ModelState.IsValid)
             {
+                var db = repo.UnitOfWork.Context;
                 db.Entry(product).State = EntityState.Modified;
                 //    db.SaveChanges();
                 repo.UnitOfWork.Commit();
