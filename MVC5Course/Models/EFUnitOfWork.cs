@@ -13,8 +13,16 @@ namespace MVC5Course.Models
 
 		public void Commit()
 		{
-			Context.SaveChanges();
-		}
+            try
+            {
+                Context.SaveChanges();
+
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                throw ex;
+            }
+        }
 		
 		public bool LazyLoadingEnabled
 		{
