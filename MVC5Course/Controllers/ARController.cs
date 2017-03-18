@@ -13,5 +13,20 @@ namespace MVC5Course.Controllers
         {
             return View("123");
         }
+
+        public ActionResult View1()
+        {
+            return PartialView("View2");
+        }
+
+        public ActionResult View2()
+        {
+            return File(Server.MapPath("~/Content/bbc_news_logo.png"), "image/png");
+        }
+
+        public ActionResult View3()
+        {
+            return File(Server.MapPath("~/Content/bbc_news_logo.png"), "image/png","圖片下載.png");
+        }
     }
 }
