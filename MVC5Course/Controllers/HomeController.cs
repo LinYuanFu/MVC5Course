@@ -50,6 +50,9 @@ namespace MVC5Course.Controllers
                 {
                     return Redirect("Index");
                 }
+
+                TempData["LoginResult"] = login;
+
                 if (ReturnUrl.StartsWith("/"))
                 {
                     return Redirect(ReturnUrl);
