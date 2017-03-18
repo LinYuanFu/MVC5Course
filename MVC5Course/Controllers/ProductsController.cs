@@ -20,6 +20,13 @@ namespace MVC5Course.Controllers
         {
             //    return View(db.Product.OrderByDescending(p => p.ProductId).Take(10).ToList());
             //    var data = db.Product.AsQueryable();
+            DoSearchIndex(sortBy, keyword, pageNo);
+
+            return View();
+        }
+
+        private void DoSearchIndex(string sortBy, string keyword, int pageNo)
+        {
             var data = repoBase.All().AsQueryable();
 
             if (!String.IsNullOrEmpty(keyword))
@@ -39,15 +46,26 @@ namespace MVC5Course.Controllers
             ViewBag.keyword = keyword;
 
             ViewData.Model = data.ToPagedList(pageNo, 10);
-
-            return View();
         }
 
         [HttpPost]
-        public ActionResult Index(Product[] productData)
+        public ActionResult Index(Product[] data, string sortBy, string keyword, int pageNo = 1)
         {
+            if (ModelState.IsValid)
+            {
+                foreach (var item in data)
+                {
+                    var prod = repoBase.Find(item.ProductId);
+                    prod.ProductName = item.ProductName;
+                    prod.Price = item.Price;
+                    prod.Stock = item.Stock;
+                    prod.Active = item.Active;
+                }
+                repoBase.UnitOfWork.Commit();
+                return RedirectToAction("Index");
+            }
 
-
+            DoSearchIndex(sortBy, keyword, pageNo);
             return View();
         }
 
@@ -113,15 +131,19 @@ namespace MVC5Course.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,ProductName,Price,Active,Stock")] Product product)
+        public ActionResult Edit(int id,FormCollection form)
         {
+             var product = repoBase.Find(id);
             if (ModelState.IsValid)
             {
-                var db = repoBase.UnitOfWork.Context;
-                db.Entry(product).State = EntityState.Modified;
-                //    db.SaveChanges();
-                repoBase.UnitOfWork.Commit();
-                return RedirectToAction("Index");
+                if (TryUpdateModel(product,new string[] { "ProductName", "Stock" }))
+                {
+                    //var db = repoBase.UnitOfWork.Context;
+                    //db.Entry(product).State = EntityState.Modified;
+                    //    db.SaveChanges();
+                    repoBase.UnitOfWork.Commit();
+                    return RedirectToAction("Index");
+                }
             }
             return View(product);
         }
