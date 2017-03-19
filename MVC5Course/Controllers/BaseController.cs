@@ -9,7 +9,7 @@ using System.Web.Mvc;
 namespace MVC5Course.Controllers
 {
     [Authorize]
-    [Action執行時間Attribute]
+    [Action執行時間]
     public abstract class BaseController : Controller
     {
         public ProductRepository repoBase = RepositoryHelper.GetProductRepository();
