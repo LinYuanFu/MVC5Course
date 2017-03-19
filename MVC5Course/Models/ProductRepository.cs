@@ -14,7 +14,7 @@ namespace MVC5Course.Models
 
         public override IQueryable<Product> All()
         {
-            return base.All().Where(p => false == p.IsDeleted && p.Stock < 500);
+            return base.All().Where(p => false == p.IsDeleted && p.Stock > 50);
         }
 
         public IQueryable<Product> All(bool showAll)

@@ -3,11 +3,12 @@
 @{
     ViewBag.Title = "Error";
 
+    var ex = Model.Exception as Exception;
 }
 
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
-<pre>@Model.ActionName</pre>
-<pre>@Model.ControllerName</pre>
-<pre>@Model.Exception.ToString()</pre>
+<h1 class="text-danger">資料驗證失敗</h1>
+<h2 class="text-danger">錯誤訊息如下</h2>
+
