@@ -9,8 +9,13 @@ namespace MVC5Course.Controllers
     public class TestController : BaseController
     {
         // GET: Test
-        public ActionResult Index()
+        public ActionResult Index(string ex = "")
         {
+            if (ex == "err")
+            {
+                throw new ArgumentOutOfRangeException("ex");
+            }
+
             return View();
         }
     }

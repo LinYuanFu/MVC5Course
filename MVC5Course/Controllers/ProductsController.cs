@@ -8,12 +8,13 @@ using System.Web;
 using System.Web.Mvc;
 using MVC5Course.Models;
 using PagedList;
+using System.Data.Entity.Validation;
 
 namespace MVC5Course.Controllers
 {
     public class ProductsController : BaseController
     {
-    //    private FabricsEntities db = new FabricsEntities();
+        //    private FabricsEntities db = new FabricsEntities();
 
         // GET: Products
         public ActionResult Index(string sortBy,string keyword,int pageNo = 1)
@@ -131,6 +132,7 @@ namespace MVC5Course.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [HandleError(View = "Error_DbEntityValidationException", ExceptionType = typeof(DbEntityValidationException))]
         public ActionResult Edit(int id,FormCollection form)
         {
              var product = repoBase.Find(id);
@@ -141,11 +143,11 @@ namespace MVC5Course.Controllers
                     //var db = repoBase.UnitOfWork.Context;
                     //db.Entry(product).State = EntityState.Modified;
                     //    db.SaveChanges();
-                    repoBase.UnitOfWork.Commit();
-                    return RedirectToAction("Index");
                 }
             }
-            return View(product);
+            repoBase.UnitOfWork.Commit();
+            return RedirectToAction("Index");
+        //    return View(product);
         }
 
         // GET: Products/Delete/5
