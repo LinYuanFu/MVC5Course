@@ -24,7 +24,6 @@ namespace MVC5Course.Controllers
 
             //ViewBag.FilterActive = new SelectList(new List<string> { "True", "False" });
             var activeOptions = repoBase.All().Select(p => p.Active.HasValue ? p.Active.Value.ToString() : "False").Distinct().ToList();
-            
             ViewBag.FilterActive = new SelectList(activeOptions);
 
             DoSearchIndex(sortBy, keyword, pageNo);
