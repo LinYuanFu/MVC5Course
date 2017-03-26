@@ -17,10 +17,16 @@ namespace MVC5Course.Controllers
         //    private FabricsEntities db = new FabricsEntities();
 
         // GET: Products
-        public ActionResult Index(string sortBy,string keyword,int pageNo = 1)
+        public ActionResult Index(string filterActive, string sortBy,string keyword,int pageNo = 1)
         {
             //    return View(db.Product.OrderByDescending(p => p.ProductId).Take(10).ToList());
             //    var data = db.Product.AsQueryable();
+
+            //ViewBag.FilterActive = new SelectList(new List<string> { "True", "False" });
+            var activeOptions = repoBase.All().Select(p => p.Active.HasValue ? p.Active.Value.ToString() : "False").Distinct().ToList();
+            
+            ViewBag.FilterActive = new SelectList(activeOptions);
+
             DoSearchIndex(sortBy, keyword, pageNo);
 
             return View();
@@ -50,7 +56,7 @@ namespace MVC5Course.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(Product[] data, string sortBy, string keyword, int pageNo = 1)
+        public ActionResult Index(string filterActive, Product[] data, string sortBy, string keyword, int pageNo = 1)
         {
             if (ModelState.IsValid)
             {
@@ -65,6 +71,12 @@ namespace MVC5Course.Controllers
                 repoBase.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
+
+            //ViewBag.FilterActive = new SelectList(new List<string> { "True", "False" });
+            var activeOptions = repoBase.All().Select(p => p.Active.HasValue ? p.Active.Value.ToString() : "False").Distinct().ToList();
+
+            ViewBag.FilterActive = new SelectList(activeOptions);
+
 
             DoSearchIndex(sortBy, keyword, pageNo);
             return View();
@@ -148,7 +160,7 @@ namespace MVC5Course.Controllers
              var product = repoBase.Find(id);
             if (ModelState.IsValid)
             {
-                if (TryUpdateModel(product,new string[] { "ProductName", "Stock" }))
+                if (TryUpdateModel(product,new string[] { "ProductName", "Stock", "Active" }))
                 {
                     //var db = repoBase.UnitOfWork.Context;
                     //db.Entry(product).State = EntityState.Modified;
